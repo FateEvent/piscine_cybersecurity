@@ -47,6 +47,9 @@ def scrap_links(links: set, params: list, max_depth: int, images: set, base_url:
 
 
 def main() -> int:
+	if len(sys.argv) == 3:
+		args = list(sys.argv[2])
+		print(args)
 	params = {"depth": 0, "count": 0}
 	links = set()
 	images = set()
@@ -58,7 +61,6 @@ def main() -> int:
 		img_filename = os.path.basename(image)
 		with open(os.path.join("data", img_filename), "wb") as file:
 			file.write(requests.get(image).content)
-
 
 if (__name__ == "__main__"):
 	if len(sys.argv) == 1 or len(sys.argv) > 3:
