@@ -189,7 +189,10 @@ $> docker image pull xfabvx/onion
 
 To run it:
 ```
-$> docker run -it -p 4242:4242 -p 80:80 onion
+$> docker run -it -p 4242:4242 -p 80:80 xfabvx/onion
+```
+followed by:
+```
 $> service ssh start
 $> service nginx start
 $> tor
@@ -206,4 +209,11 @@ To exit from this process:
 ```
 ctrl + c
 $> exit
+```
+
+To suppress the images:
+```
+$> docker system prune -f (to remove all stopped containers, all networks not used by at least one container, all dangling images and build cache)
+$> docker images -a (to see all the images)
+$> docker image rm REPOSITORY
 ```
