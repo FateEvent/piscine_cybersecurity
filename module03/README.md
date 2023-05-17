@@ -154,3 +154,56 @@ $> cat hostname
 Cela nous donnera un hash avec un .onion à la fin [xxxxxx...xxx.onion] et ce sera notre lien de connexion dans tor ou Brave tor. 
 
 Notre serveur est alors terminé.
+
+---
+
+Later I created an image that I stored on Docker Hub.
+In order to do this, I created a Tape Archive (tar) backup with the command
+```
+$> docker save onion > onion.tar ('onion' being my image name)
+```
+* <https://docs.docker.com/engine/reference/commandline/save>
+
+and logged in from CLI into Docker Hub
+(and got the following error message, by the way)
+![Error message](docker_login_error.png)
+
+* <https://stackoverflow.com/questions/72709388/docker-login-failure-on-mac-os-x>.
+
+Finally I loaded my image from the tar file to the hub:
+```
+$> docker image load --input onion.tar			(this will output the original image name)
+$> docker image tag onion xfabvx/onion:latest	(to tag an image for a private repository)
+$> docker push xfabvx/onion
+```
+
+* <https://docs.docker.com/engine/reference/commandline/load>;
+* <https://stackoverflow.com/questions/52521633/how-to-push-a-tar-archive-to-private-docker-registry>;
+* <https://docs.docker.com/engine/reference/commandline/tag>
+
+To download the image from the private repo:
+```
+$> docker image pull xfabvx/onion
+```
+* <https://docs.docker.com/engine/reference/commandline/pull>;
+
+To run it:
+```
+$> docker run -it -p 4242:4242 -p 80:80 onion
+$> service ssh start
+$> service nginx start
+$> tor
+```
+and we repeat the following commands from a terminal connected to our server by ssh:
+```
+$> ssh user@127.0.0.1 -p 4242
+$> sudo su (we will be asked for our login and password) 
+$> cd /var/lib/tor/hidden_service/ 
+$> cat hostname
+```
+Finally we will use a web browser like Brave or Tor (for client) to connect to our server with the url we just retrieved.
+To exit from this process:
+```
+ctrl + c
+$> exit
+```
