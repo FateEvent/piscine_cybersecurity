@@ -78,5 +78,5 @@ def main():
 
 if (__name__ == "__main__"):
 	if len(sys.argv) == 1:
-		sys.exit("Usage: python3 ./scorpion.py FILE1 [FILE2 ...]")
+		sys.exit("Usage: python3 scorpion.py FILE1 [FILE2 ...]")
 	main()
