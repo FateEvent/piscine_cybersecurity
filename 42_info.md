@@ -18,3 +18,7 @@ To install python modules on Mac:
 ```
 pip3 install MODULE --user
 ```
+To use oathtool:
+```
+brew install oath-toolkit
+```
