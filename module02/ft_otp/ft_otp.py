@@ -1,9 +1,13 @@
 import os
 import sys
-import string
 import hmac
-from binascii import unhexlify
+import codecs
 import time
+
+def encrypt_secret(secret: int):
+	with open('ft_otp.key', 'w') as file:
+		file.write(str(secret))
+		file.close()
 
 def main():
 	obj = time.gmtime(0)
@@ -12,10 +16,33 @@ def main():
 	curr_time = round(time.time()*1000)
 	print("Milliseconds since epoch:",curr_time)
 	f = open("hex.txt", "r")
-	string = f.read()
-	if all(c in string.hexdigits for c in string): #and len(string) >= 64:
-		print(f.read())
-	print(s)
+	hex_string = f.readline()
+	try:
+		value = int(hex_string, 16)
+	except ValueError:
+		sys.exit("error: the string is not a valid hexadecimal string")
+	if len(hex_string) >= 64:
+		if len(hex_string) % 2 == 0:
+			hex_data = codecs.decode(hex_string, 'hex')
+			hmac_obj = hmac.new(hex_data, str(curr_time).encode(), 'sha256')
+			msg_digest = hmac_obj.digest()
+			print(msg_digest)
+			offset = msg_digest[len(msg_digest) - 1] & 0xf
+			bin_code = (msg_digest[offset] & 0x7f) << 24 \
+				| (msg_digest[offset + 1] & 0xff) << 16 \
+				| (msg_digest[offset + 2] & 0xff) <<  8 \
+				| (msg_digest[offset + 3] & 0xff)
+			print(bin_code)
+			hashing = bin_code % 10**6
+			print(hashing)
+			encrypt_secret(hashing)
+		else:
+			sys.exit("error: the hexadecimal string must have an even number of digits.")
+	else:
+		sys.exit("error: key must be 64 hexadecimal characters.")
+
+
+
 	# for file in sys.argv[1:]:
 	# 	print(f"Metadata for {file} :")
 	# 	image = get_image(file)
