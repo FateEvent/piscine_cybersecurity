@@ -22,3 +22,9 @@ To use oathtool:
 ```
 brew install oath-toolkit
 ```
+
+To use it:
+```
+oathtool --totp $(cat key.txt)
+oathtool --totp=256 $(cat key.txt) (for using SHA256, SHA1 being the default one)
+```
