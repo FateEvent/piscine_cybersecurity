@@ -55,7 +55,11 @@ def scrap_images(link: str, saved_images: set, path: str):
 					if len(img_path) < 260:
 						os.makedirs(img_path, exist_ok=True)
 						with open(img_full_path, "wb") as file:
-							file.write(requests.get(img_url).content)
+							try:
+								file.write(requests.get(img_url).content)
+							except Exception as e:
+								file.close()
+								sys.exit(f"error: cannot retrieve data from a URL! ({e})")
 				count += 1
 	print(" Found {} images, {} downloaded.".format(count, downloaded))
 
@@ -101,8 +105,6 @@ if (__name__ == "__main__"):
 							if i < len(sys.argv):
 								if not urllib.parse.urlparse(sys.argv[i + 1]).scheme != "":
 									path = sys.argv[i + 1]
-									print(i)
-									print(path)
 								else:
 									sys.exit("Usage: python3 spider.py [-rlp] URL")
 							else:
