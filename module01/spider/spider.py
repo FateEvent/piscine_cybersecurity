@@ -8,7 +8,6 @@ import urllib
 
 def is_url(url):
     return urllib.parse.urlparse(url).scheme != ""
-is_url(sys.argv[1])
 
 def scrap_links(links: set, depth: int, max_depth: int, base_url: str, followed_links: set):
 	if depth >= max_depth:
@@ -59,7 +58,7 @@ def scrap_images(link: str, saved_images: set, path: str):
 								file.write(requests.get(img_url).content)
 							except Exception as e:
 								file.close()
-								sys.exit(f"error: cannot retrieve data from a URL! ({e})")
+								print(f"error: cannot retrieve data from a URL! ({e})")
 				count += 1
 	print(" Found {} images, {} downloaded.".format(count, downloaded))
 
