@@ -4,6 +4,11 @@ import requests
 import shutil
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
+import urllib
+
+def is_url(url):
+    return urllib.parse.urlparse(url).scheme != ""
+is_url(sys.argv[1])
 
 def scrap_links(links: set, depth: int, max_depth: int, base_url: str, followed_links: set):
 	if depth >= max_depth:
@@ -86,25 +91,25 @@ if (__name__ == "__main__"):
 						if sys.argv[i][j] == 'r':
 							recursive = True
 						elif sys.argv[i][j] == 'l':
-							if i <= len(sys.argv) and sys.argv[i + 1].isdigit():
+							if i < len(sys.argv) and sys.argv[i + 1].isdigit():
 								max_depth = int(sys.argv[i + 1])
 								max_depth_changed = True
 								max_depth_pos = int(i)
 							else:
 								sys.exit("Usage: python3 spider.py [-rlp] URL")
 						elif sys.argv[i][j] == 'p':
-							if i <= len(sys.argv):
-								path = sys.argv[i + 1]
+							if i < len(sys.argv):
+								if not urllib.parse.urlparse(sys.argv[i + 1]).scheme != "":
+									path = sys.argv[i + 1]
+									print(i)
+									print(path)
+								else:
+									sys.exit("Usage: python3 spider.py [-rlp] URL")
 							else:
 								sys.exit("Usage: python3 spider.py [-rlp] URL")
 						else:
 							sys.exit("Usage: python3 spider.py [-rlp] URL")
-				elif i == len(sys.argv) - 1:
-					target_uri = sys.argv[i]
-				elif max_depth_changed and i == max_depth_pos + 1:
-					continue
-				else:
-					sys.exit("Usage: python3 spider.py [-rlp] URL")
+			target_uri = sys.argv[len(sys.argv) - 1]
 		else:
 			target_uri = sys.argv[1]
 		if not (target_uri.startswith("http://") or target_uri.startswith("https://")) or (max_depth_changed == True and recursive == False):

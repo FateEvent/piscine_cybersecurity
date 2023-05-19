@@ -18,9 +18,13 @@ To install python modules on Mac:
 ```
 pip3 install MODULE --user
 ```
-To use oathtool:
+To install oathtool, a program used to generate and validate OATH one-time passwords:
+* <https://www.nongnu.org/oath-toolkit/man-oathtool.html>
 ```
 brew install oath-toolkit
 oathtool --totp $(cat key.txt)
 oathtool --totp=256 $(cat key.txt) (for using SHA256, SHA1 being the default one)
 ```
+To install Ghidra, a reverse engineering tool developed in Java by NSA allowing to analyse any sort of binary.
+To configure and install Ghidra, follow (in French):
+* <https://korben.info/un-launcher-ghidra-pour-macos.html>.
