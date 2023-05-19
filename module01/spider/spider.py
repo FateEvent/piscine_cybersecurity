@@ -47,9 +47,10 @@ def scrap_images(link: str, saved_images: set, path: str):
 				if img_full_path not in saved_images:
 					downloaded += 1
 					saved_images.add(img_full_path)
-					os.makedirs(img_path, exist_ok=True)
-					with open(img_full_path, "wb") as file:
-						file.write(requests.get(img_url).content)
+					if len(img_path) < 260:
+						os.makedirs(img_path, exist_ok=True)
+						with open(img_full_path, "wb") as file:
+							file.write(requests.get(img_url).content)
 				count += 1
 	print(" Found {} images, {} downloaded.".format(count, downloaded))
 
@@ -76,7 +77,7 @@ if (__name__ == "__main__"):
 	recursive = False
 	target_uri = ''
 	if len(sys.argv) == 1 or len(sys.argv) > 7:
-		sys.exit("Usage: python3 spider.py [-rlpS] URL")
+		sys.exit("Usage: python3 spider.py [-rlp] URL")
 	else:
 		if len(sys.argv) > 2:
 			for i in range(1, len(sys.argv)):
@@ -90,24 +91,24 @@ if (__name__ == "__main__"):
 								max_depth_changed = True
 								max_depth_pos = int(i)
 							else:
-								sys.exit("Usage: python3 spider.py [-rlpS] URL")
+								sys.exit("Usage: python3 spider.py [-rlp] URL")
 						elif sys.argv[i][j] == 'p':
 							if i <= len(sys.argv):
 								path = sys.argv[i + 1]
 							else:
-								sys.exit("Usage: python3 spider.py [-rlpS] URL")
+								sys.exit("Usage: python3 spider.py [-rlp] URL")
 						else:
-							sys.exit("Usage: python3 spider.py [-rlpS] URL")
+							sys.exit("Usage: python3 spider.py [-rlp] URL")
 				elif i == len(sys.argv) - 1:
 					target_uri = sys.argv[i]
 				elif max_depth_changed and i == max_depth_pos + 1:
 					continue
 				else:
-					sys.exit("Usage: python3 spider.py [-rlpS] URL")
+					sys.exit("Usage: python3 spider.py [-rlp] URL")
 		else:
 			target_uri = sys.argv[1]
 		if not (target_uri.startswith("http://") or target_uri.startswith("https://")) or (max_depth_changed == True and recursive == False):
-			sys.exit("Usage: python3 spider.py [-rlpS] URL")
+			sys.exit("Usage: python3 spider.py [-rlp] URL")
 		if not os.path.exists(path):
 			os.makedirs(path)
 		main(max_depth, path, recursive, target_uri)
