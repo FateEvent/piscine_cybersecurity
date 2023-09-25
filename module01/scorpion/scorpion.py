@@ -36,7 +36,7 @@ def convert_to_degrees(value) -> float:
 	decimal = value[0]
 	minute = value[1] / 60.0
 	second = value[2] / 3600.0
-	return decimal + (minute / 60.0) + (second / 3600)
+	return decimal + minute + second
 
 def print_gps_info(exif: Image.Exif):
 	latitude = 0.0
